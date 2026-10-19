@@ -6,7 +6,7 @@
 
 <p><strong>Add tasks, walk away, get merged PRs with proof.</strong></p>
 
-<p>8 skills (5 you type, 3 the board runs) · 9 commands · 6 guard hooks</p>
+<p>9 skills (6 you type, 3 the board runs) · 9 commands · 6 guard hooks</p>
 
 <p>
 <img alt="Version" src="https://img.shields.io/badge/version-3.1.2-1f883d?style=flat-square">
@@ -77,10 +77,10 @@ Add cards to `Ready`. The board drains on its own.
 
 ## Skills
 
-**8 skills (5 you type, 3 the board runs).** Uses [Matt Pocock skills](https://github.com/mattpocock/skills), ponytail, impeccable and humanizer.
+**9 skills (6 you type, 3 the board runs).** Uses [Matt Pocock skills](https://github.com/mattpocock/skills), ponytail, impeccable and humanizer.
 
 <!-- skills:start -->
-**You type — 5 skills**
+**You type — 6 skills**
 
 | Skill | What it does |
 |---|---|
@@ -89,6 +89,7 @@ Add cards to `Ready`. The board drains on its own.
 | [`/ui-refine-loop`](skills/ui-refine-loop/README.md) | Critique → refine loop that polishes one page or component. |
 | [`/visual`](skills/visual/README.md) | One HTML page: branch recap, plan, or codebase map with diagrams. |
 | [`/git-sync`](skills/git-sync/README.md) | Commit per logical change, merge-pull, push without force, report. |
+| [`/mission-control`](skills/mission-control/SKILL.md) | Ahmad's router: picks the skill per phase, hands builds to super-board. |
 
 **The board runs — 3 lanes**
 
