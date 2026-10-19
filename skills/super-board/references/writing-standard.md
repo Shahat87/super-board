@@ -89,7 +89,6 @@ Closes #790
 
 | Block | Marker | Written by | When | Required |
 |---|---|---|---|---|
-| Red check | `<!-- sb:redcheck -->` | reviewer | merged with a failing check | when it applies |
 | Status | `<!-- sb:status -->` | every lane | rewritten on every exit | yes |
 | Problem | `<!-- sb:problem -->` | builder | PR open (from the ticket's Context) | yes |
 | Solution | `<!-- sb:solution -->` | builder | PR open, each rebuild | yes |
@@ -99,13 +98,6 @@ Closes #790
 | Risk | `<!-- sb:risk -->` | builder writes, reviewer adjusts | PR open, review | yes |
 
 Each block closes with `<!-- /sb:<name> -->`.
-
-**Red check.** Shipped with a failing check? The first thing in the body says which and why:
-
-```
-> [!WARNING]
-> 🔴 Merged with a failing check: `e2e-mobile` · CI budget block; local suite green 42/42, truth 91/100
-```
 
 **Status card** — a GitHub alert, one line:
 

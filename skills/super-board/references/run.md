@@ -159,7 +159,6 @@ read it — re-read, then redo the edit. Builder opens the PR with every block f
 | `history` (Lane · Done · Time · Details) | appends a row | appends a row | appends a row |
 | `visual` (Before \| After, UI only) | — | writes | — |
 | `risk` (🟢/🟡/🔴 + one line) | writes | — | adjusts |
-| `redcheck` (only when merged with a failing check) | — | — | writes |
 
 ```markdown
 <!-- sb:status -->
@@ -214,10 +213,7 @@ Status card lines: `> [!NOTE]` + `🔨 Building` / `⏳ In QA` / `⏳ In review 
 count and the head commit, so evidence is never read against a different one.
 
 No "Not verified" and no "Next" section: an unchecked AC with its one-line reason says what is
-not proven. Merged with a failing check (the 💳 CI-budget bypass) → the Reviewer writes the
-`redcheck` block first:
-`> [!WARNING]` / `> 🔴 Merged with a failing check: <check> · <why it was safe>`, and names the
-check in `risk` too.
+not proven.
 
 ## PR review-comment threads — prefix + resolution protocol
 
@@ -418,7 +414,6 @@ If a screenshot file is >5MB, downscale to ≤1920px wide before committing; Git
    - **Over-engineering only** (from `ponytail:ponytail-review`, see super-review step 3) → list it in the report, open no thread, and carry on to the merge decision; it never bounces a card alone. When the card bounces for another finding anyway, open a `[builder]` thread for each Over-engineering finding too, so the rebuild trims it.
    - **Code-side new finding** → open new `[builder]`-prefixed PR thread, comment, move card Review → Ready (label `loop:rebuild-N`).
    - **Test-side new finding** → open new `[qa]`-prefixed PR thread, comment, move card Review → QA (label `loop:rebuild-N`).
-   - **CI-budget block (💳, added 2026-05-22)** — if remote CI jobs `failed_to_start` due to `Actions budget` AND `config.auto_merge_on_ci_budget_block` is true AND local-evidence is strong (truth ≥ threshold, Tester suite green on rerun in step 5, all `[builder]`/`[qa]` threads clean) → **squash-merge anyway** on local evidence; do NOT move to Blocked. Write the PR's `redcheck` block (`> [!WARNING]` · `🔴 Merged with a failing check: <check> · CI budget block`) and a `[reviewer] [report] ✅ merged · CI-budget bypass` comment on the PR and the issue citing: (a) the failed CI run ID, (b) the Tester pass-count, (c) the truth-gate score. Reason: CI failure-to-start ≠ test failure; with strong local evidence, parking the card wastes pipeline time. This bypass is ONLY for `💳` — never for `🛡` truth-fail, `🔐` missing creds, or `🧑` human-only decisions.
    - **Human-gate / Blocker finding (destructive schema, API contract, money, auth, live-DB migration) / rebuild cap hit (config.rebuild_cap)** → write the full Block template (see §4), move card Review → Blocked. A clean PR that only *touches* money, auth or schema is not a blocker — run the merge protocol; the gate's `merge_policy` routes it to a human (exit 7 → 🙋 Blocked).
 8. Write the **Reviewer report** on every exit from step 3b on — bounce, block, human gate, merge (a Gate 1 thread bounce reviews nothing and writes none). It is ONE comment per PR, **edited in place** each round: find it by the marker (step 3b's lookup, plus `.url` — the number after `#issuecomment-` is its id) and `gh api -X PATCH repos/<owner>/<repo>/issues/comments/<id> -F body=@<file>`; post a new comment only when none exists. It is what step 3b reads next time, so the first line is the stable marker and every finding keeps its id (writing-standard.md § 4):
 
@@ -453,6 +448,9 @@ on the base branch**.
    `gh pr merge`. The gate applies `merge_policy` (who merges; `default: "human"`
    keeps a person on every merge) and `migrations` (which databases the robot may
    migrate) itself; the Reviewer does not second-guess either, it routes the exit code.
+   Before the gate: `gh pr checks <PR>`. Any failing, cancelled or not-started check
+   (CI budget included) → do not merge; card → Blocked. No checks configured = nothing
+   to wait for; `verify_commands` in the gate stay the required evidence.
 3. Confirm the merge LANDED, do not trust the exit code:
      gh pr view <PR> --json state,mergeCommit -q '.state + " " + (.mergeCommit.oid // "none")'
      Expect: MERGED <sha>.  Then verify the sha is reachable from the base branch:
